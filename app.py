@@ -1,6 +1,5 @@
 import streamlit as st
 
-# Beispielhafte HFmax für Nutzer (kann später individuell einstellbar gemacht werden)
 HFMAX = 180
 
 def pulsbereich(prozent_min, prozent_max):
@@ -8,7 +7,6 @@ def pulsbereich(prozent_min, prozent_max):
     max_bpm = int(HFMAX * prozent_max / 100)
     return f"{prozent_min:.0f}–{prozent_max:.0f}% HFmax ({min_bpm}–{max_bpm} bpm)"
 
-# Trainingsprogramme
 training_programs = {
     "GA1 – Grundlagen moderat": [
         {"name": "Warm-up", "duration": 10, "intensity": pulsbereich(60, 70), "notes": "lockeres Einrollen"},
@@ -17,14 +15,32 @@ training_programs = {
         {"name": "Intervall 2", "duration": 10, "intensity": pulsbereich(70, 75), "notes": "GA1 konstant"},
         {"name": "Cooldown", "duration": 10, "intensity": pulsbereich(60, 65), "notes": "austreten"}
     ],
+    "Fahrtspiel": [
+        {"name": "Warm-up", "duration": 10, "intensity": pulsbereich(60, 70), "notes": ""},
+        {"name": "4x Tempowechsel", "duration": 20, "intensity": pulsbereich(75, 85), "notes": "Wechsel zwischen zügig (3 Min) & locker (2 Min)"},
+        {"name": "2x Sprint", "duration": 2, "intensity": pulsbereich(90, 95), "notes": "2x 1 Min Sprint mit 1 Min Pause"},
+        {"name": "Cooldown", "duration": 10, "intensity": pulsbereich(60, 65), "notes": ""}
+    ],
+    "Schwellentraining – FTP-orientiert": [
+        {"name": "Warm-up", "duration": 10, "intensity": pulsbereich(60, 70), "notes": "inkl. 3x 30 Sek. hohe Trittfrequenz"},
+        {"name": "Schwelle 1", "duration": 10, "intensity": pulsbereich(85, 90), "notes": ""},
+        {"name": "Pause", "duration": 4, "intensity": pulsbereich(60, 65), "notes": ""},
+        {"name": "Schwelle 2", "duration": 10, "intensity": pulsbereich(85, 90), "notes": ""},
+        {"name": "Cooldown", "duration": 10, "intensity": pulsbereich(60, 65), "notes": ""}
+    ],
     "VO₂max Training": [
         {"name": "Warm-up", "duration": 10, "intensity": pulsbereich(60, 70), "notes": ""},
-        {"name": "Intervall 1", "duration": 2, "intensity": pulsbereich(90, 95), "notes": "intensiv"},
-        {"name": "Pause", "duration": 2, "intensity": pulsbereich(60, 65), "notes": ""},
-        {"name": "Intervall 2", "duration": 2, "intensity": pulsbereich(90, 95), "notes": "intensiv"},
-        {"name": "Pause", "duration": 2, "intensity": pulsbereich(60, 65), "notes": ""},
-        {"name": "Intervall 3", "duration": 2, "intensity": pulsbereich(90, 95), "notes": "intensiv"},
-        {"name": "Pause", "duration": 2, "intensity": pulsbereich(60, 65), "notes": ""},
+        {"name": "6x 2 Min intensiv", "duration": 12, "intensity": pulsbereich(90, 95), "notes": "Mit je 2 Min Pause"},
+        {"name": "Cooldown", "duration": 10, "intensity": pulsbereich(60, 65), "notes": ""}
+    ],
+    "Recovery Ride": [
+        {"name": "Recovery", "duration": 30, "intensity": pulsbereich(55, 65), "notes": "Erholungstraining, locker"}
+    ],
+    "Kombi GA1 + VO₂max": [
+        {"name": "Warm-up", "duration": 10, "intensity": pulsbereich(60, 70), "notes": ""},
+        {"name": "GA1 Teil 1", "duration": 15, "intensity": pulsbereich(70, 75), "notes": ""},
+        {"name": "VO₂max Blöcke", "duration": 12, "intensity": pulsbereich(90, 95), "notes": "3x 2 Min mit Pause"},
+        {"name": "GA1 Teil 2", "duration": 10, "intensity": pulsbereich(70, 75), "notes": ""},
         {"name": "Cooldown", "duration": 10, "intensity": pulsbereich(60, 65), "notes": ""}
     ]
 }
