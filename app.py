@@ -1,7 +1,6 @@
-Import streamlit as st
+import streamlit as st
 import time
 
-# Trainingsdaten
 training_session = [
     {"name": "Warm-up", "duration": 10, "intensity": "locker", "notes": "3x 20 Sek hohe Frequenz"},
     {"name": "Intervall 1", "duration": 8, "intensity": "GA1", "notes": "90–95 rpm, 70–75% FTP"},
@@ -12,7 +11,6 @@ training_session = [
     {"name": "Cooldown", "duration": 10, "intensity": "locker", "notes": "progressiv von 80 bis 100 rpm"}
 ]
 
-# Session-State initialisieren
 if "phase_index" not in st.session_state:
     st.session_state.phase_index = 0
 if "timer_running" not in st.session_state:
@@ -21,7 +19,6 @@ if "timer_running" not in st.session_state:
 st.title("🚴‍♂️ Interaktives Trainingsdashboard")
 st.subheader("🎯 Einheit: ca. 50 Minuten – Intervallbasiert")
 
-# Aktuelle Phase
 if st.session_state.phase_index < len(training_session):
     phase = training_session[st.session_state.phase_index]
     st.markdown(f"## Phase {st.session_state.phase_index + 1}: {phase['name']}")
@@ -29,7 +26,6 @@ if st.session_state.phase_index < len(training_session):
     st.write(f"🔥 Intensität: *{phase['intensity']}*")
     st.write(f"📌 Hinweis: {phase['notes']}")
 
-    # Start-Button
     if st.button("▶ Start Phase"):
         st.session_state.timer_running = True
         with st.spinner("Läuft..."):
