@@ -12,6 +12,8 @@ training_session = [
 
 if "phase_index" not in st.session_state:
     st.session_state.phase_index = 0
+if "completed" not in st.session_state:
+    st.session_state.completed = False
 
 st.title("🚴‍♂️ Interaktives Trainingsdashboard")
 st.subheader("🎯 Einheit: ca. 50 Minuten – Intervallbasiert")
@@ -23,11 +25,9 @@ if st.session_state.phase_index < len(training_session):
     st.write(f"🔥 Intensität: *{phase['intensity']}*")
     st.write(f"📌 Hinweis: {phase['notes']}")
 
-    if st.button("✅ Phase abschließen & nächste starten"):
+    if st.button("✅ Nächste Phase starten"):
         st.session_state.phase_index += 1
-        st.experimental_rerun()
 else:
     st.success("🎉 Alle Phasen abgeschlossen! Gut gemacht!")
     if st.button("🔄 Zurück zum Anfang"):
         st.session_state.phase_index = 0
-        st.experimental_rerun()
