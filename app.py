@@ -1,5 +1,4 @@
 import streamlit as st
-import time
 
 training_session = [
     {"name": "Warm-up", "duration": 10, "intensity": "locker", "notes": "3x 20 Sek hohe Frequenz"},
@@ -13,8 +12,6 @@ training_session = [
 
 if "phase_index" not in st.session_state:
     st.session_state.phase_index = 0
-if "timer_running" not in st.session_state:
-    st.session_state.timer_running = False
 
 st.title("🚴‍♂️ Interaktives Trainingsdashboard")
 st.subheader("🎯 Einheit: ca. 50 Minuten – Intervallbasiert")
@@ -22,21 +19,15 @@ st.subheader("🎯 Einheit: ca. 50 Minuten – Intervallbasiert")
 if st.session_state.phase_index < len(training_session):
     phase = training_session[st.session_state.phase_index]
     st.markdown(f"## Phase {st.session_state.phase_index + 1}: {phase['name']}")
-    st.write(f"🕒 Dauer: {phase['duration']} Min")
+    st.write(f"🕒 Dauer: {phase['duration']} Minuten")
     st.write(f"🔥 Intensität: *{phase['intensity']}*")
     st.write(f"📌 Hinweis: {phase['notes']}")
 
-    if st.button("▶ Start Phase"):
-        st.session_state.timer_running = True
-        with st.spinner("Läuft..."):
-            for remaining in range(phase["duration"] * 60, 0, -1):
-                mins, secs = divmod(remaining, 60)
-                st.write(f"⏱️ {mins:02d}:{secs:02d} verbleibend")
-                time.sleep(1)
-                st.experimental_rerun()
-        st.success(f"✅ {phase['name']} abgeschlossen!")
+    if st.button("✅ Phase abschließen & nächste starten"):
         st.session_state.phase_index += 1
-        st.session_state.timer_running = False
         st.experimental_rerun()
 else:
     st.success("🎉 Alle Phasen abgeschlossen! Gut gemacht!")
+    if st.button("🔄 Zurück zum Anfang"):
+        st.session_state.phase_index = 0
+        st.experimental_rerun()
