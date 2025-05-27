@@ -8,48 +8,66 @@ def pulsbereich(prozent_min, prozent_max):
     max_bpm = int(HFMAX * prozent_max / 100)
     return f"{prozent_min:.0f}–{prozent_max:.0f}% HFmax ({min_bpm}–{max_bpm} bpm)"
 
+# Trainingsprogramme nach Dauer kategorisiert
 training_programs = {
-    "GA1 – Grundlagen moderat": [
-        {"name": "Warm-up", "duration": 5, "intensity": pulsbereich(60, 70), "notes": "lockeres Einrollen"},
-        {"name": "Intervall 1", "duration": 10, "intensity": pulsbereich(70, 75), "notes": "GA1 konstant"},
-        {"name": "Pause", "duration": 5, "intensity": pulsbereich(55, 65), "notes": "Erholung"},
-        {"name": "Intervall 2", "duration": 10, "intensity": pulsbereich(70, 75), "notes": "GA1 konstant"},
-        {"name": "Cooldown", "duration": 5, "intensity": pulsbereich(60, 65), "notes": "austreten"}
-    ],
-    "GA2 – Grundlage intensiv": [
-        {"name": "Warm-up", "duration": 5, "intensity": pulsbereich(60, 70), "notes": "lockeres Einrollen"},
-        {"name": "Intervall 1", "duration": 8, "intensity": pulsbereich(75, 80), "notes": "GA2 Belastung"},
-        {"name": "Pause", "duration": 4, "intensity": pulsbereich(55, 65), "notes": "Erholung"},
-        {"name": "Intervall 2", "duration": 8, "intensity": pulsbereich(75, 80), "notes": "GA2 Belastung"},
-        {"name": "Cooldown", "duration": 5, "intensity": pulsbereich(60, 65), "notes": "austreten"}
-    ],
-    "FTP-Test": [
-        {"name": "Warm-up", "duration": 10, "intensity": pulsbereich(60, 70), "notes": "lockeres Einrollen"},
-        {"name": "All-Out Test", "duration": 20, "intensity": "Maximale Leistung", "notes": "Konstant am Limit"},
-        {"name": "Cooldown", "duration": 10, "intensity": pulsbereich(60, 65), "notes": "lockeres Ausrollen"}
-    ],
-    "VO2max-Intervalle": [
-        {"name": "Warm-up", "duration": 5, "intensity": pulsbereich(60, 70), "notes": "locker einrollen"},
-        {"name": "VO2max Intervall", "duration": 4, "intensity": pulsbereich(90, 95), "notes": "hochintensive Belastung"},
-        {"name": "Pause", "duration": 4, "intensity": pulsbereich(55, 65), "notes": "lockere Erholung"},
-        {"name": "VO2max Intervall", "duration": 4, "intensity": pulsbereich(90, 95), "notes": "hochintensive Belastung"},
-        {"name": "Cooldown", "duration": 5, "intensity": pulsbereich(60, 65), "notes": "austreten"}
-    ],
-    "K3-Kraftausdauer": [
-        {"name": "Warm-up", "duration": 5, "intensity": pulsbereich(60, 70), "notes": "locker einrollen"},
-        {"name": "Berg-Simulation", "duration": 8, "intensity": pulsbereich(80, 85), "notes": "hohe Übersetzung, niedrige Trittfrequenz"},
-        {"name": "Pause", "duration": 5, "intensity": pulsbereich(55, 65), "notes": "Erholung"},
-        {"name": "Berg-Simulation", "duration": 8, "intensity": pulsbereich(80, 85), "notes": "zweite Runde"},
-        {"name": "Cooldown", "duration": 5, "intensity": pulsbereich(60, 65), "notes": "locker ausrollen"}
-    ],
-    "Regeneration": [
-        {"name": "Regeneratives Fahren", "duration": 30, "intensity": pulsbereich(55, 65), "notes": "komplett locker bleiben"},
-    ]
+    "30 Minuten": {
+        "Regenerationseinheit": [
+            {"name": "Regeneratives Fahren", "duration": 30, "intensity": pulsbereich(55, 65), "notes": "komplett locker bleiben"}
+        ],
+        "Jon's Short Mix": [
+            {"name": "Warm-up", "duration": 5, "intensity": pulsbereich(60, 70), "notes": "lockeres Einrollen"},
+            {"name": "Intervall", "duration": 20, "intensity": pulsbereich(75, 85), "notes": "abwechslungsreiche Belastung"},
+            {"name": "Cooldown", "duration": 5, "intensity": pulsbereich(60, 65), "notes": "austreten"}
+        ]
+    },
+    "60 Minuten": {
+        "GA1 – Grundlagen moderat": [
+            {"name": "Warm-up", "duration": 5, "intensity": pulsbereich(60, 70), "notes": "lockeres Einrollen"},
+            {"name": "Intervall 1", "duration": 10, "intensity": pulsbereich(70, 75), "notes": "GA1 konstant"},
+            {"name": "Pause", "duration": 5, "intensity": pulsbereich(55, 65), "notes": "Erholung"},
+            {"name": "Intervall 2", "duration": 10, "intensity": pulsbereich(70, 75), "notes": "GA1 konstant"},
+            {"name": "Cooldown", "duration": 5, "intensity": pulsbereich(60, 65), "notes": "austreten"}
+        ],
+        "The McCarthy Special": [
+            {"name": "Warm-up", "duration": 10, "intensity": pulsbereich(60, 70), "notes": "lockeres Einrollen"},
+            {"name": "Intervall 1", "duration": 3, "intensity": pulsbereich(90, 95), "notes": "hohe Intensität"},
+            {"name": "Pause", "duration": 9, "intensity": pulsbereich(55, 65), "notes": "Erholung"},
+            {"name": "Intervall 2", "duration": 3, "intensity": pulsbereich(90, 95), "notes": "hohe Intensität"},
+            {"name": "Pause", "duration": 9, "intensity": pulsbereich(55, 65), "notes": "Erholung"},
+            {"name": "Intervall 3", "duration": 3, "intensity": pulsbereich(90, 95), "notes": "hohe Intensität"},
+            {"name": "Cooldown", "duration": 10, "intensity": pulsbereich(60, 65), "notes": "austreten"}
+        ]
+    },
+    "90 Minuten": {
+        "SST (Med)": [
+            {"name": "Warm-up", "duration": 10, "intensity": pulsbereich(60, 70), "notes": "lockeres Einrollen"},
+            {"name": "Intervall 1", "duration": 20, "intensity": pulsbereich(88, 94), "notes": "Sweet Spot"},
+            {"name": "Pause", "duration": 5, "intensity": pulsbereich(55, 65), "notes": "Erholung"},
+            {"name": "Intervall 2", "duration": 20, "intensity": pulsbereich(88, 94), "notes": "Sweet Spot"},
+            {"name": "Pause", "duration": 5, "intensity": pulsbereich(55, 65), "notes": "Erholung"},
+            {"name": "Intervall 3", "duration": 20, "intensity": pulsbereich(88, 94), "notes": "Sweet Spot"},
+            {"name": "Cooldown", "duration": 10, "intensity": pulsbereich(60, 65), "notes": "austreten"}
+        ],
+        "Kombination: GA1 + Regenerationseinheit*": [
+            {"name": "Warm-up", "duration": 5, "intensity": pulsbereich(60, 70), "notes": "lockeres Einrollen"},
+            {"name": "Intervall 1", "duration": 10, "intensity": pulsbereich(70, 75), "notes": "GA1 konstant"},
+            {"name": "Pause", "duration": 5, "intensity": pulsbereich(55, 65), "notes": "Erholung"},
+            {"name": "Intervall 2", "duration": 10, "intensity": pulsbereich(70, 75), "notes": "GA1 konstant"},
+            {"name": "Cooldown", "duration": 5, "intensity": pulsbereich(60, 65), "notes": "austreten"},
+            {"name": "Regeneratives Fahren", "duration": 30, "intensity": pulsbereich(55, 65), "notes": "komplett locker bleiben"}
+        ]
+    }
 }
 
 st.title("🚴‍♂️ Trainings-Dashboard")
-selected_program = st.selectbox("Wähle dein Trainingsprogramm:", list(training_programs.keys()))
 
+# Auswahl der Trainingsdauer
+selected_duration = st.selectbox("Wähle die Trainingsdauer:", list(training_programs.keys()))
+
+# Auswahl des Trainingsprogramms basierend auf der gewählten Dauer
+selected_program = st.selectbox("Wähle dein Trainingsprogramm:", list(training_programs[selected_duration].keys()))
+
+# Initialisierung der Session State Variablen
 if "phase_index" not in st.session_state:
     st.session_state.phase_index = 0
 if "current_program" not in st.session_state or st.session_state.current_program != selected_program:
@@ -58,7 +76,7 @@ if "current_program" not in st.session_state or st.session_state.current_program
     st.session_state.remaining_seconds = 0
     st.session_state.timer_running = False
 
-training = training_programs[selected_program]
+training = training_programs[selected_duration][selected_program]
 
 if "timer_running" not in st.session_state:
     st.session_state.timer_running = False
