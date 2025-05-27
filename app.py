@@ -1,4 +1,5 @@
 import streamlit as st
+import time
 
 HFMAX = 180
 
@@ -6,6 +7,15 @@ def pulsbereich(prozent_min, prozent_max):
     min_bpm = int(HFMAX * prozent_min / 100)
     max_bpm = int(HFMAX * prozent_max / 100)
     return f"{prozent_min:.0f}–{prozent_max:.0f}% HFmax ({min_bpm}–{max_bpm} bpm)"
+
+def countdown_timer(total_minutes):
+    total_seconds = total_minutes * 60
+    placeholder = st.empty()
+    for i in range(total_seconds, 0, -1):
+        mins, secs = divmod(i, 60)
+        placeholder.markdown(f"## ⏱️ Zeit: {mins:02d}:{secs:02d}")
+        time.sleep(1)
+    placeholder.markdown("## ⏰ Zeit abgelaufen!")
 
 training_programs = {
     "GA1 – Grundlagen moderat": [
@@ -64,8 +74,16 @@ if st.session_state.phase_index < len(training):
     st.write(f"🕒 Dauer: {phase['duration']} Minuten")
     st.write(f"❤️‍🔥 Ziel-HF: {phase['intensity']}")
     st.write(f"📌 Hinweis: {phase['notes']}")
-    if st.button("✅ Nächste Phase starten"):
-        st.session_state.phase_index += 1
+
+    countdown_timer(phase['duration'])
+
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("⬅️ Zurück") and st.session_state.phase_index > 0:
+            st.session_state.phase_index -= 1
+    with col2:
+        if st.button("✅ Nächste Phase starten"):
+            st.session_state.phase_index += 1
 else:
     st.success("🎉 Training abgeschlossen!")
     if st.button("🔁 Zurück zum Start"):
