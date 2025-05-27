@@ -10,24 +10,53 @@ def pulsbereich(prozent_min, prozent_max):
 
 training_programs = {
     "GA1 – Grundlagen moderat": [
-        {"name": "Warm-up", "duration": 1, "intensity": pulsbereich(60, 70), "notes": "lockeres Einrollen"},
-        {"name": "Intervall 1", "duration": 1, "intensity": pulsbereich(70, 75), "notes": "GA1 konstant"},
-        {"name": "Pause", "duration": 1, "intensity": pulsbereich(55, 65), "notes": "Erholung"},
-        {"name": "Intervall 2", "duration": 1, "intensity": pulsbereich(70, 75), "notes": "GA1 konstant"},
-        {"name": "Cooldown", "duration": 1, "intensity": pulsbereich(60, 65), "notes": "austreten"}
+        {"name": "Warm-up", "duration": 5, "intensity": pulsbereich(60, 70), "notes": "lockeres Einrollen"},
+        {"name": "Intervall 1", "duration": 10, "intensity": pulsbereich(70, 75), "notes": "GA1 konstant"},
+        {"name": "Pause", "duration": 5, "intensity": pulsbereich(55, 65), "notes": "Erholung"},
+        {"name": "Intervall 2", "duration": 10, "intensity": pulsbereich(70, 75), "notes": "GA1 konstant"},
+        {"name": "Cooldown", "duration": 5, "intensity": pulsbereich(60, 65), "notes": "austreten"}
+    ],
+    "GA2 – Grundlage intensiv": [
+        {"name": "Warm-up", "duration": 5, "intensity": pulsbereich(60, 70), "notes": "lockeres Einrollen"},
+        {"name": "Intervall 1", "duration": 8, "intensity": pulsbereich(75, 80), "notes": "GA2 Belastung"},
+        {"name": "Pause", "duration": 4, "intensity": pulsbereich(55, 65), "notes": "Erholung"},
+        {"name": "Intervall 2", "duration": 8, "intensity": pulsbereich(75, 80), "notes": "GA2 Belastung"},
+        {"name": "Cooldown", "duration": 5, "intensity": pulsbereich(60, 65), "notes": "austreten"}
+    ],
+    "FTP-Test": [
+        {"name": "Warm-up", "duration": 10, "intensity": pulsbereich(60, 70), "notes": "lockeres Einrollen"},
+        {"name": "All-Out Test", "duration": 20, "intensity": "Maximale Leistung", "notes": "Konstant am Limit"},
+        {"name": "Cooldown", "duration": 10, "intensity": pulsbereich(60, 65), "notes": "lockeres Ausrollen"}
+    ],
+    "VO2max-Intervalle": [
+        {"name": "Warm-up", "duration": 5, "intensity": pulsbereich(60, 70), "notes": "locker einrollen"},
+        {"name": "VO2max Intervall", "duration": 4, "intensity": pulsbereich(90, 95), "notes": "hochintensive Belastung"},
+        {"name": "Pause", "duration": 4, "intensity": pulsbereich(55, 65), "notes": "lockere Erholung"},
+        {"name": "VO2max Intervall", "duration": 4, "intensity": pulsbereich(90, 95), "notes": "hochintensive Belastung"},
+        {"name": "Cooldown", "duration": 5, "intensity": pulsbereich(60, 65), "notes": "austreten"}
+    ],
+    "K3-Kraftausdauer": [
+        {"name": "Warm-up", "duration": 5, "intensity": pulsbereich(60, 70), "notes": "locker einrollen"},
+        {"name": "Berg-Simulation", "duration": 8, "intensity": pulsbereich(80, 85), "notes": "hohe Übersetzung, niedrige Trittfrequenz"},
+        {"name": "Pause", "duration": 5, "intensity": pulsbereich(55, 65), "notes": "Erholung"},
+        {"name": "Berg-Simulation", "duration": 8, "intensity": pulsbereich(80, 85), "notes": "zweite Runde"},
+        {"name": "Cooldown", "duration": 5, "intensity": pulsbereich(60, 65), "notes": "locker ausrollen"}
+    ],
+    "Regeneration": [
+        {"name": "Regeneratives Fahren", "duration": 30, "intensity": pulsbereich(55, 65), "notes": "komplett locker bleiben"},
     ]
 }
 
-st.title("🚴‍♂️ Trainingsdashboard mit manuellem Timer")
-st.subheader("Wähle dein Training")
-
-selected_program = st.selectbox("Trainingsvariante", list(training_programs.keys()))
+st.title("🚴‍♂️ Trainings-Dashboard")
+selected_program = st.selectbox("Wähle dein Trainingsprogramm:", list(training_programs.keys()))
 
 if "phase_index" not in st.session_state:
     st.session_state.phase_index = 0
 if "current_program" not in st.session_state or st.session_state.current_program != selected_program:
     st.session_state.phase_index = 0
     st.session_state.current_program = selected_program
+    st.session_state.remaining_seconds = 0
+    st.session_state.timer_running = False
 
 training = training_programs[selected_program]
 
@@ -38,20 +67,18 @@ if "remaining_seconds" not in st.session_state:
 
 if st.session_state.phase_index < len(training):
     phase = training[st.session_state.phase_index]
-    st.markdown(f"## Phase {st.session_state.phase_index + 1}: {phase['name']}")
+    st.subheader(f"Phase {st.session_state.phase_index + 1}: {phase['name']}")
     st.write(f"🕒 Dauer: {phase['duration']} Minuten")
-    st.write(f"❤️‍🔥 Ziel-HF: {phase['intensity']}")
+    st.write(f"❤️‍🔥 Intensität: {phase['intensity']}")
     st.write(f"📌 Hinweis: {phase['notes']}")
 
     total_seconds = phase['duration'] * 60
     if st.session_state.remaining_seconds == 0:
         st.session_state.remaining_seconds = total_seconds
 
-    # Countdown anzeigen
     mins, secs = divmod(st.session_state.remaining_seconds, 60)
     st.markdown(f"## ⏱️ Zeit: {mins:02d}:{secs:02d}")
 
-    # Steuerungsbuttons
     col1, col2, col3, col4 = st.columns(4)
     if col1.button("▶️ Start"):
         st.session_state.timer_running = True
@@ -64,22 +91,23 @@ if st.session_state.phase_index < len(training):
         st.session_state.phase_index += 1
         st.session_state.remaining_seconds = 0
         st.session_state.timer_running = False
+        st.rerun()
 
-    # Zurück-Button (außer bei erster Phase)
     if st.session_state.phase_index > 0:
         if st.button("⬅️ Zurück"):
             st.session_state.phase_index -= 1
             st.session_state.remaining_seconds = 0
             st.session_state.timer_running = False
+            st.rerun()
 
-    # Automatische Aktualisierung (nur wenn Timer läuft)
     if st.session_state.timer_running and st.session_state.remaining_seconds > 0:
         time.sleep(1)
         st.session_state.remaining_seconds -= 1
-        st.experimental_rerun()
+        st.rerun()
 else:
     st.success("🎉 Training abgeschlossen!")
-    if st.button("🔁 Zurück zum Start"):
+    if st.button("🔁 Training von vorn starten"):
         st.session_state.phase_index = 0
         st.session_state.remaining_seconds = 0
         st.session_state.timer_running = False
+        st.rerun()
