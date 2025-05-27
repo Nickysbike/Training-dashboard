@@ -41,51 +41,56 @@ training_programs = {
 }
 
 # App-Titel
-st.title("Trainings-Dashboard")
+st.title("🏋️‍♂️ Trainings-Dashboard")
 
 # Auswahl der Dauer
-selected_duration = st.selectbox("Wähle Trainingsdauer:", list(training_programs.keys()))
+selected_duration = st.selectbox("⏱️ Wähle Trainingsdauer:", list(training_programs.keys()))
 
 # Auswahl des Programms basierend auf Dauer
 if selected_duration:
     programs = list(training_programs[selected_duration].keys())
-    selected_program = st.selectbox("Wähle Trainingsprogramm:", programs)
+    selected_program = st.selectbox("📋 Wähle Trainingsprogramm:", programs)
 
     if selected_program:
         training_plan = training_programs[selected_duration][selected_program]
+
+        # Initialisierung des Session State
         if "current_phase" not in st.session_state:
             st.session_state.current_phase = 0
         if "timer_running" not in st.session_state:
             st.session_state.timer_running = False
         if "timer_start_time" not in st.session_state:
-            st.session_state.timer_start_time = 0
+            st.session_state.timer_start_time = None
 
-        # Phase anzeigen
+        # Anzeige der aktuellen Phase
         current = training_plan[st.session_state.current_phase]
-        st.subheader(f"Phase {st.session_state.current_phase + 1} von {len(training_plan)}")
-        st.markdown(f"**Name:** {current['phase']}")
-        st.markdown(f"**Dauer:** {current['dauer']} Minuten")
-        st.markdown(f"**Intensität:** {current['intensität']}")
+        st.subheader(f"🔄 Phase {st.session_state.current_phase + 1} von {len(training_plan)}")
+        st.markdown(f"**🏷️ Name:** {current['phase']}")
+        st.markdown(f"**⏳ Dauer:** {current['dauer']} Minuten")
+        st.markdown(f"**🔥 Intensität:** {current['intensität']}")
 
         # Timer-Logik
-        if st.button("Start Timer") and not st.session_state.timer_running:
-            st.session_state.timer_running = True
-            st.session_state.timer_start_time = time.time()
-
-        if st.button("Stop Timer"):
-            st.session_state.timer_running = False
-
-        if st.session_state.timer_running:
-            elapsed_time = int(time.time() - st.session_state.timer_start_time)
-            st.info(f"Laufzeit: {elapsed_time // 60:02d}:{elapsed_time % 60:02d} Minuten")
-
-        # Navigation
         col1, col2 = st.columns(2)
         with col1:
-            if st.button("Zurück") and st.session_state.current_phase > 0:
+            if st.button("▶️ Start Timer") and not st.session_state.timer_running:
+                st.session_state.timer_running = True
+                st.session_state.timer_start_time = time.time()
+        with col2:
+            if st.button("⏹️ Stop Timer"):
+                st.session_state.timer_running = False
+
+        if st.session_state.timer_running and st.session_state.timer_start_time:
+            elapsed_time = int(time.time() - st.session_state.timer_start_time)
+            minutes, seconds = divmod(elapsed_time, 60)
+            st.info(f"⏱️ Laufzeit: {minutes:02d}:{seconds:02d} Minuten")
+
+        # Navigation
+        nav1, nav2 = st.columns(2)
+        with nav1:
+            if st.button("⬅️ Zurück") and st.session_state.current_phase > 0:
                 st.session_state.current_phase -= 1
                 st.session_state.timer_running = False
-        with col2:
-            if st.button("Weiter") and st.session_state.current_phase < len(training_plan) - 1:
+        with nav2:
+            if st.button("➡️ Weiter") and st.session_state.current_phase < len(training_plan) - 1:
                 st.session_state.current_phase += 1
                 st.session_state.timer_running = False
